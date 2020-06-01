@@ -12,10 +12,10 @@ pub struct MidiBus<'a> {
 }
 
 impl<'a> MidiBus<'_> {
-    pub fn send(&mut self, message: &NoteMessage) {
+    pub fn send(&mut self, message: &NoteMessage, bpm: u64) {
         self.conn.send(&[NOTE_ON, message.note, message.velocity]);
 
-        sleep(Duration::from_millis(message.duration * 150));
+        sleep(Duration::from_millis(message.duration_ms(bpm)));
 
         self.conn.send(&[NOTE_OFF, message.note, message.velocity]);
     }

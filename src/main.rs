@@ -1,14 +1,15 @@
 use midir::MidiOutput;
 use std::error::Error;
 use std::io::{stdin, stdout, Write};
-use std::thread::sleep;
-use std::time::Duration;
 
 mod note_message;
-use note_message::NoteMessage;
+use note_message::{NoteDuration, NoteMessage};
 
 mod midi_bus;
 use midi_bus::MidiBus;
+
+mod midi_player;
+use midi_player::MidiPlayer;
 
 fn main() {
     match run() {
@@ -52,24 +53,26 @@ fn run() -> Result<(), Box<dyn Error>> {
 
     // :perfection:
     let messages = vec![
-        NoteMessage::new(57, 3),
-        NoteMessage::new(59, 3),
-        NoteMessage::new(60, 3),
-        NoteMessage::new(62, 3),
-        NoteMessage::new(57, 1),
-        NoteMessage::new(59, 2),
-        NoteMessage::new(55, 2),
-        NoteMessage::new(57, 5),
+        NoteMessage::new(57, NoteDuration::Quarter),
+        NoteMessage::new(59, NoteDuration::Quarter),
+        NoteMessage::new(60, NoteDuration::Quarter),
+        NoteMessage::new(62, NoteDuration::Quarter),
+        NoteMessage::new(57, NoteDuration::Sixteenth),
+        NoteMessage::new(59, NoteDuration::Quarter),
+        NoteMessage::new(55, NoteDuration::Eigth),
+        NoteMessage::new(57, NoteDuration::Whole),
     ];
 
     let mut message_bus = MidiBus {
         conn: &mut conn_out,
     };
-    for m in messages {
-        message_bus.send(&m);
-    }
 
-    sleep(Duration::from_millis(150));
+    MidiPlayer {
+        bus: &mut message_bus,
+        notes: &messages,
+    }
+    .play(180);
+
     println!("\nClosing connection");
     // This is optional, the connection would automatically be closed as soon as it goes out of scope
     conn_out.close();

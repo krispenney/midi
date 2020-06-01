@@ -1,0 +1,10 @@
+[package]
+name = "midi"
+version = "0.1.0"
+authors = ["Kris Penney <kris9101@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+midir = "0.6"

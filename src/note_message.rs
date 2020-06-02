@@ -28,11 +28,11 @@ impl NoteMessage {
         let quarter_note_duration = ONE_MINUTE_MS / bpm;
 
         match self.duration {
-            NoteDuration::Sixteenth => quarter_note_duration / 4,
-            NoteDuration::Eigth => quarter_note_duration / 2,
+            NoteDuration::Sixteenth => quarter_note_duration >> 2,
+            NoteDuration::Eigth => quarter_note_duration >> 1,
             NoteDuration::Quarter => quarter_note_duration,
-            NoteDuration::Half => quarter_note_duration * 2,
-            NoteDuration::Whole => quarter_note_duration * 4,
+            NoteDuration::Half => quarter_note_duration << 1,
+            NoteDuration::Whole => quarter_note_duration << 2,
         }
     }
 }
